@@ -19,5 +19,6 @@ import org.springframework.cache.annotation.EnableCaching;
 public class SpringbootApplication  {
 	public static void main(String[] args) {
         SpringApplication.run(SpringbootApplication.class, args);
+        System.out.println("程序正在运行...");
     }
 }

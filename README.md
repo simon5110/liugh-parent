@@ -62,7 +62,9 @@
 -   Eclipse、IDEA运行SpringbootApplication.java，则可启动项目。或在liugh-parent目录下运行命令mvn clean package，然后在liugh-web/target目录下运行java -jar liugh-web.jar命令
 
     
--   访问登录接口：localhost:8081/api/v1/login
+-   访问登录接口：http://localhost:8081/localhost:8081/api/v1/login
+
+-   接口文档：http://localhost:8081/api/v1/swagger-ui.html
     
 -   账号密码：{"identity":"13888888888","password":"123456"}或 {"identity":"admin","password":"123456"}
 或 {"identity":"53182347@qq.com","password":"123456"}(管理员)
