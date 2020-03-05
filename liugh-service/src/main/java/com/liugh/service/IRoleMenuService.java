@@ -1,7 +1,7 @@
 package com.liugh.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.liugh.entity.RoleToMenu;
+import com.liugh.entity.RoleMenu;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ import java.util.List;
  * @author liugh123
  * @since 2018-05-03
  */
-public interface IRoleToMenuService extends IService<RoleToMenu> {
+public interface IRoleMenuService extends IService<RoleMenu> {
 
     /**
      * 根据角色ID查询
      * @param roleId    角色ID
      * @return  结果集
      */
-    List<RoleToMenu> selectByRoleCode(String roleId);
+    List<RoleMenu> selectByRoleCode(String roleId);
 
     /**
      * 根据角色、权限集合录入数据

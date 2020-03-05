@@ -23,16 +23,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@TableName("tb_user_to_role")
-public class UserToRole extends Model<UserToRole> {
+@TableName("tb_user_role")
+public class UserRole extends Model<UserRole> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId(value = "user_to_role_id", type = IdType.AUTO)
-    private Integer userToRoleId;
+    @TableId(value = "user_role_id", type = IdType.AUTO)
+    private Integer userRoleId;
     /**
      * 用户编号
      */
@@ -46,6 +46,30 @@ public class UserToRole extends Model<UserToRole> {
 
     @Override
     protected Serializable pkVal() {
-        return this.userToRoleId;
+        return this.userRoleId;
+    }
+
+    public Integer getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(Integer userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 }

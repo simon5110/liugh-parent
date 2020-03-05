@@ -23,16 +23,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@TableName("tb_role_to_menu")
-public class RoleToMenu extends Model<RoleToMenu> {
+@TableName("tb_role_menu")
+public class RoleMenu extends Model<RoleMenu> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId(value = "role_to_menu_id", type = IdType.AUTO)
-    private Integer roleToMenuId;
+    @TableId(value = "role_menu_id", type = IdType.AUTO)
+    private Integer roleMenuId;
     /**
      * 角色代号
      */
@@ -46,7 +46,30 @@ public class RoleToMenu extends Model<RoleToMenu> {
 
     @Override
     protected Serializable pkVal() {
-        return this.roleToMenuId;
+        return this.roleMenuId;
     }
 
+    public Integer getRoleMenuId() {
+        return roleMenuId;
+    }
+
+    public void setRoleMenuId(Integer roleMenuId) {
+        this.roleMenuId = roleMenuId;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getMenuCode() {
+        return menuCode;
+    }
+
+    public void setMenuCode(String menuCode) {
+        this.menuCode = menuCode;
+    }
 }

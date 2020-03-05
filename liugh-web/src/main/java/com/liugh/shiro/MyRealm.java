@@ -5,7 +5,7 @@ import com.liugh.base.Constant;
 import com.liugh.entity.Menu;
 import com.liugh.entity.Role;
 import com.liugh.entity.User;
-import com.liugh.entity.UserToRole;
+import com.liugh.entity.UserRole;
 import com.liugh.exception.UnauthorizedException;
 import com.liugh.service.*;
 import com.liugh.util.ComUtil;
@@ -29,7 +29,7 @@ import java.util.Set;
  */
 public class MyRealm extends AuthorizingRealm {
     private IUserService userService;
-    private IUserToRoleService userToRoleService;
+    private IUserRoleService userToRoleService;
     private IMenuService menuService;
     private IRoleService roleService;
     /**
@@ -46,7 +46,7 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         if (userToRoleService == null) {
-            this.userToRoleService = SpringContextBeanService.getBean(IUserToRoleService.class);
+            this.userToRoleService = SpringContextBeanService.getBean(IUserRoleService.class);
         }
         if (menuService == null) {
             this.menuService = SpringContextBeanService.getBean(IMenuService.class);
@@ -57,16 +57,16 @@ public class MyRealm extends AuthorizingRealm {
 
         String userNo = JWTUtil.getUserNo(principals.toString());
         User user = userService.selectById(userNo);
-        UserToRole userToRole = userToRoleService.selectByUserNo(user.getUserNo());
+        UserRole userToRole = userToRoleService.selectByUserNo(user.getUserNo());
 
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        /*
+//        /*
         Role role = roleService.selectOne(new EntityWrapper<Role>().eq("role_code", userToRole.getRoleCode()));
         //添加控制角色级别的权限
         Set<String> roleNameSet = new HashSet<>();
         roleNameSet.add(role.getRoleName());
         simpleAuthorizationInfo.addRoles(roleNameSet);
-        */
+//        */
         //控制菜单级别按钮  类中用@RequiresPermissions("user:list") 对应数据库中code字段来控制controller
         ArrayList<String> pers = new ArrayList<>();
         List<Menu> menuList = menuService.findMenuByRoleCode(userToRole.getRoleCode());

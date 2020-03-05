@@ -1,6 +1,6 @@
 package com.liugh.service;
 
-import com.liugh.entity.UserToRole;
+import com.liugh.entity.UserRole;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -11,13 +11,13 @@ import com.baomidou.mybatisplus.service.IService;
  * @author liugh123
  * @since 2018-05-03
  */
-public interface IUserToRoleService extends IService<UserToRole> {
+public interface IUserRoleService extends IService<UserRole> {
 
     /**
      * 根据用户ID查询人员角色
      * @param userNo 用户ID
      * @return  结果
      */
-    UserToRole selectByUserNo(String  userNo);
+    UserRole selectByUserNo(String  userNo);
 
 }

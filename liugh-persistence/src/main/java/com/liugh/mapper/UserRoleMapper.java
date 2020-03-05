@@ -1,7 +1,7 @@
 package com.liugh.mapper;
 
+import com.liugh.entity.UserRole;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.liugh.entity.RoleToMenu;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.liugh.entity.RoleToMenu;
  * @author liugh123
  * @since 2018-05-03
  */
-public interface RoleToMenuMapper extends BaseMapper<RoleToMenu> {
+public interface UserRoleMapper extends BaseMapper<UserRole> {
 
 }

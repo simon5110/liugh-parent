@@ -19,7 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/userToRole")
 //不加入swagger ui里
 @ApiIgnore
-public class UserToRoleController {
+public class UserRoleController {
 
 }
 

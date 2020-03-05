@@ -51,11 +51,12 @@ public class AllControllerAdvice {
      * 捕捉UnauthorizedException
      * @return
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
     public ResponseModel<String> handleUnauthorized() {
-        return ResponseHelper.validationFailure(PublicResultConstant.USER_NO_PERMITION);
+//        return ResponseHelper.validationFailure(PublicResultConstant.USER_NO_PERMITION);
+        return ResponseHelper.validationToken(PublicResultConstant.UNAUTHORIZED);
     }
 
     /**

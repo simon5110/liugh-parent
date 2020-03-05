@@ -1,7 +1,7 @@
 package com.liugh.service;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.liugh.entity.InfoToUser;
+import com.liugh.entity.UserInfo;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.liugh.entity.InfoToUser;
  * @author liugh123
  * @since 2018-10-29
  */
-public interface IInfoToUserService extends IService<InfoToUser> {
+public interface IUserInfoService extends IService<UserInfo> {
 
 }

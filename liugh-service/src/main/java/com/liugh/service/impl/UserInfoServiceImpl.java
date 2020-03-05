@@ -1,9 +1,9 @@
 package com.liugh.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.liugh.entity.InfoToUser;
-import com.liugh.mapper.InfoToUserMapper;
-import com.liugh.service.IInfoToUserService;
+import com.liugh.entity.UserInfo;
+import com.liugh.mapper.UserInfoMapper;
+import com.liugh.service.IUserInfoService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2018-10-29
  */
 @Service
-public class InfoToUserServiceImpl extends ServiceImpl<InfoToUserMapper, InfoToUser> implements IInfoToUserService {
+public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> implements IUserInfoService {
 
 }

@@ -6,6 +6,8 @@ import com.liugh.annotation.AccessLimit;
 import com.liugh.base.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -20,8 +22,9 @@ import java.util.concurrent.TimeUnit;
  * 限流切面
  * Created by liugh on 2018/10/12.
  */
-@Slf4j
+//@Slf4j
 public class AccessLimitAspect extends AbstractAspectManager{
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public AccessLimitAspect(AspectApi aspectApi){
         super(aspectApi);
@@ -49,12 +52,12 @@ public class AccessLimitAspect extends AbstractAspectManager{
             // 创建令牌桶
             rateLimiter = RateLimiter.create(lxRateLimit.perSecond());
             limitMap.put(url, rateLimiter);
-            log.info("<<=================  请求{},创建令牌桶,容量{} 成功!!!",url,lxRateLimit.perSecond());
+            logger.info("<<=================  请求{},创建令牌桶,容量{} 成功!!!",url,lxRateLimit.perSecond());
         }
         rateLimiter = limitMap.get(url);
         if (!rateLimiter.tryAcquire(lxRateLimit.timeOut(), lxRateLimit.timeOutUnit())) {//获取令牌
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            log.info("Error ---时间:{},获取令牌失败.", sdf.format(new Date()));
+            logger.info("Error ---时间:{},获取令牌失败.", sdf.format(new Date()));
             throw new BusinessException("服务器繁忙，请稍后再试!");
         }
         return null;

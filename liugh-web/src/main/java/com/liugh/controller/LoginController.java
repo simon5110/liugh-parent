@@ -8,6 +8,7 @@ import com.liugh.config.ResponseHelper;
 import com.liugh.config.ResponseModel;
 import com.liugh.entity.User;
 import com.liugh.service.IUserService;
+import com.liugh.service.impl.MyWebSocketService;
 import com.liugh.util.ComUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -30,6 +33,8 @@ import java.util.Map;
 @RestController
 @Api(description="身份认证模块")
 public class LoginController {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private IUserService userService;
 
@@ -44,9 +49,10 @@ public class LoginController {
     @Pass
     //5秒产生一个令牌,放入容量为0.3的令牌桶
     @AccessLimit(perSecond=0.3,timeOut = 5000)
-    public ResponseModel<Map<String, Object>> login(
-            @ValidationParam("identity,password")@RequestBody JSONObject requestJson) throws Exception{
-        return ResponseHelper.buildResponseModel(userService.checkMobileAndPasswd(requestJson));
+    public ResponseModel<Map<String, Object>> login(@ValidationParam("identity,password")@RequestBody JSONObject requestJson) throws Exception{
+        Map<String,Object> map =userService.checkMobileAndPasswd(requestJson);
+        logger.info("登录返回结果："+JSONObject.toJSONString(map));
+        return ResponseHelper.buildResponseModel(map);
     }
 
     @ApiIgnore

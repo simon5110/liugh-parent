@@ -23,16 +23,16 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@TableName("tb_info_to_user")
-public class InfoToUser extends Model<InfoToUser> {
+@TableName("tb_user_info")
+public class UserInfo extends Model<UserInfo> {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * 主键
      */
-    @TableId(value = "info_to_user_id", type = IdType.AUTO)
-    private Integer infoToUserId;
+    @TableId(value = "user_info_id", type = IdType.AUTO)
+    private Integer userInfoId;
     /**
      * 用户账号
      */
@@ -54,6 +54,38 @@ public class InfoToUser extends Model<InfoToUser> {
 
     @Override
     protected Serializable pkVal() {
-        return this.infoToUserId;
+        return this.userInfoId;
+    }
+
+    public Integer getUserInfoId() {
+        return userInfoId;
+    }
+
+    public void setUserInfoId(Integer userInfoId) {
+        this.userInfoId = userInfoId;
+    }
+
+    public String getIdentityInfo() {
+        return identityInfo;
+    }
+
+    public void setIdentityInfo(String identityInfo) {
+        this.identityInfo = identityInfo;
+    }
+
+    public String getUserNo() {
+        return userNo;
+    }
+
+    public void setUserNo(String userNo) {
+        this.userNo = userNo;
+    }
+
+    public Integer getIdentityType() {
+        return identityType;
+    }
+
+    public void setIdentityType(Integer identityType) {
+        this.identityType = identityType;
     }
 }

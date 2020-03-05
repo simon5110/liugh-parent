@@ -68,4 +68,59 @@ public class Notice extends Model<Notice> {
         return this.noticeId;
     }
 
+    public Integer getNoticeId() {
+        return noticeId;
+    }
+
+    public void setNoticeId(Integer noticeId) {
+        this.noticeId = noticeId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getThemeNo() {
+        return themeNo;
+    }
+
+    public void setThemeNo(String themeNo) {
+        this.themeNo = themeNo;
+    }
+
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
+    }
 }

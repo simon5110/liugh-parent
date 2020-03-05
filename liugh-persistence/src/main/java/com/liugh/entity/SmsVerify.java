@@ -62,4 +62,51 @@ public class SmsVerify extends Model<SmsVerify> {
         return this.smsVerifyId;
     }
 
+    public Integer getSmsVerifyId() {
+        return smsVerifyId;
+    }
+
+    public void setSmsVerifyId(Integer smsVerifyId) {
+        this.smsVerifyId = smsVerifyId;
+    }
+
+    public String getSmsId() {
+        return smsId;
+    }
+
+    public void setSmsId(String smsId) {
+        this.smsId = smsId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getSmsVerify() {
+        return smsVerify;
+    }
+
+    public void setSmsVerify(String smsVerify) {
+        this.smsVerify = smsVerify;
+    }
+
+    public Integer getSmsType() {
+        return smsType;
+    }
+
+    public void setSmsType(Integer smsType) {
+        this.smsType = smsType;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 }

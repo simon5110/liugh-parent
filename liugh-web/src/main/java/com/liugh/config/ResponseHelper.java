@@ -35,6 +35,14 @@ public class ResponseHelper {
         return response;
     }
 
+    public static <T> ResponseModel<T> validationToken(String message) {
+        ResponseModel response = new ResponseModel();
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setCode(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        response.setMessage(message);
+        return response;
+    }
+
     public static <T> ResponseModel<T> buildResponseModel(T result) {
         ResponseModel response = new ResponseModel();
         response.setStatus(HttpStatus.OK.value());

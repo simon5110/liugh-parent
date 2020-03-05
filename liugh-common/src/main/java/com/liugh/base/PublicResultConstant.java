@@ -43,4 +43,7 @@ public class PublicResultConstant {
     public static final String UPDATE_SYSADMIN_INFO_ERROR  = "不能修改管理员信息!";
 
     public static final String EMAIL_ERROR  = "邮箱格式错误";
+
+    public static final String URL_NOT_FOUND  = "路径错误";
+
 }

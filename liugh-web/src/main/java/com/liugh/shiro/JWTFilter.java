@@ -1,6 +1,7 @@
 package com.liugh.shiro;
 
 import com.alibaba.fastjson.JSONObject;
+import com.liugh.base.BusinessException;
 import com.liugh.base.Constant;
 import com.liugh.base.PublicResultConstant;
 import com.liugh.config.ResponseHelper;
@@ -11,6 +12,8 @@ import com.liugh.util.ComUtil;
 import com.liugh.util.JWTUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +21,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
@@ -157,7 +161,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      * @param requestUrl
      * @return
      */
-    private boolean isSameUrl(String localUrl,String requestUrl){
+    private boolean isSameUrl(String localUrl,String requestUrl) {
         String[] tempLocalUrls = localUrl.split("/");
         String[] tempRequestUrls = requestUrl.split("/");
         if(tempLocalUrls.length != tempRequestUrls.length){
@@ -180,19 +184,16 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      * 非法url返回身份错误信息
      */
     private void responseError(ServletRequest request, ServletResponse response) {
-        PrintWriter out = null;
         try {
+            response.reset();
             response.setCharacterEncoding("utf-8");
-            out = response.getWriter();
             response.setContentType("application/json; charset=utf-8");
-            out.print(JSONObject.toJSONString(ResponseHelper.validationFailure(PublicResultConstant.UNAUTHORIZED)));
+            PrintWriter out  = response.getWriter();
+            out.print(JSONObject.toJSONString(ResponseHelper.validationToken(PublicResultConstant.UNAUTHORIZED)));
             out.flush();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
-        }finally {
-            if (out != null) {
-                out.close();
-            }
         }
     }
 }

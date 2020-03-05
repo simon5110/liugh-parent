@@ -37,7 +37,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-//    @Cacheable(value = "UserToRole",keyGenerator="wiselyKeyGenerator")
+//    @Cacheable(value = "UserRole",keyGenerator="wiselyKeyGenerator")
     public List<Menu> findMenuByRoleCode(String roleId) {
         return menuMapper.findMenuByRoleCode(roleId);
     }

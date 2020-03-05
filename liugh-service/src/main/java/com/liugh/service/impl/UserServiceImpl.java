@@ -13,7 +13,6 @@ import com.liugh.mapper.UserMapper;
 import com.liugh.util.*;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.Map;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired
-    private IUserToRoleService userToRoleService;
+    private IUserRoleService userRoleService;
     @Autowired
     private IMenuService menuService;
 
@@ -45,7 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     @Autowired
-    private IInfoToUserService infoToUserService;
+    private IUserInfoService userInfoService;
 
     @Autowired
     private ISmsVerifyService smsVerifyService;
@@ -55,7 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IRoleService roleService;
 
     @Override
-//    @Cacheable(value = "UserToRole",keyGenerator="wiselyKeyGenerator")
+//    @Cacheable(value = "UserRole",keyGenerator="wiselyKeyGenerator")
     public User getUserByUserName(String username) {
         System.out.println("执行getUserByUserName方法了.....");
         EntityWrapper<User> ew = new EntityWrapper<>();
@@ -76,8 +75,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setCreateTime(System.currentTimeMillis());
         boolean result = this.insert(user);
         if (result) {
-            UserToRole userToRole  = UserToRole.builder().userNo(user.getUserNo()).roleCode(roleCode).build();
-            userToRoleService.insert(userToRole);
+            UserRole userToRole  = UserRole.builder().userNo(user.getUserNo()).roleCode(roleCode).build();
+            userRoleService.insert(userToRole);
         }
         return user;
     }
@@ -85,12 +84,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Map<String, Object> getLoginUserAndMenuInfo(User user) {
         Map<String, Object> result = new HashMap<>();
-        UserToRole userToRole = userToRoleService.selectByUserNo(user.getUserNo());
+        UserRole userRole = userRoleService.selectByUserNo(user.getUserNo());
         user.setToken(JWTUtil.sign(user.getUserNo(), user.getPassword()));
         result.put("user",user);
         List<Menu> buttonList = new ArrayList<Menu>();
         //根据角色主键查询启用的菜单权限
-        List<Menu> menuList = menuService.findMenuByRoleCode(userToRole.getRoleCode());
+        List<Menu> menuList = menuService.findMenuByRoleCode(userRole.getRoleCode());
         List<Menu> retMenuList = menuService.treeMenuList(Constant.ROOT_MENU, menuList);
         for (Menu buttonMenu : menuList) {
             if(buttonMenu.getMenuType() == Constant.TYPE_BUTTON){
@@ -108,9 +107,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (ComUtil.isEmpty(user)) {
             throw new BusinessException(PublicResultConstant.INVALID_USER);
         }
-        EntityWrapper<UserToRole> ew = new EntityWrapper<>();
+        EntityWrapper<UserRole> ew = new EntityWrapper<>();
         ew.eq("user_no", userNo);
-        userToRoleService.delete(ew);
+        userRoleService.delete(ew);
         this.deleteById(userNo);
     }
 
@@ -124,11 +123,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Map<String, Object> checkMobileAndPasswd(JSONObject requestJson) throws Exception{
         //由于 @ValidationParam注解已经验证过mobile和passWord参数，所以可以直接get使用没毛病。
         String identity = requestJson.getString("identity");
-        InfoToUser infoToUser = infoToUserService.selectOne(new EntityWrapper<InfoToUser>().eq("identity_info ", identity));
-        if(ComUtil.isEmpty(infoToUser)){
+        UserInfo userInfo = userInfoService.selectOne(new EntityWrapper<UserInfo>().eq("identity_info ", identity));
+        if(ComUtil.isEmpty(userInfo)){
             throw new BusinessException(PublicResultConstant.INVALID_USER);
         }
-        User user = this.selectOne(new EntityWrapper<User>().where("user_no = {0} and status = 1",infoToUser.getUserNo()));
+        User user = this.selectOne(new EntityWrapper<User>().where("user_no = {0} and status = 1",userInfo.getUserNo()));
         if (ComUtil.isEmpty(user) || !BCrypt.checkpw(requestJson.getString("password"), user.getPassword())) {
             throw new BusinessException(PublicResultConstant.INVALID_USERNAME_PASSWORD);
         }
@@ -189,7 +188,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         userRegister.setPassword(BCrypt.hashpw(requestJson.getString("password"), BCrypt.gensalt()));
         User registerUser = this.register(userRegister, Constant.RoleType.USER);
-        infoToUserService.insert(InfoToUser.builder().userNo(registerUser.getUserNo())
+        userInfoService.insert(UserInfo.builder().userNo(registerUser.getUserNo())
                 .identityInfo(userRegister.getMobile()).identityType(Constant.LOGIN_MOBILE).build());
         //默认注册普通用户
         return registerUser;
@@ -268,7 +267,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             if(!StringUtil.checkMobileNumber(user.getMobile())){
                 throw new BusinessException(PublicResultConstant.MOBILE_ERROR);
             }
-            infoToUserService.insert(InfoToUser.builder().identityInfo(user.getMobile())
+            userInfoService.insert(UserInfo.builder().identityInfo(user.getMobile())
                     .identityType(Constant.LOGIN_MOBILE).userNo(userNo)
                     .identityInfo(user.getMobile()).build());
         }
@@ -276,7 +275,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             if(!StringUtil.checkEmail(user.getEmail())){
                 throw new BusinessException(PublicResultConstant.EMAIL_ERROR);
             }
-            infoToUserService.insert(InfoToUser.builder().userNo(userNo)
+            userInfoService.insert(UserInfo.builder().userNo(userNo)
                     .identityInfo(user.getEmail()).identityType(Constant.LOGIN_EMAIL).build());
         }
         user.setPassword(BCrypt.hashpw("123456", BCrypt.gensalt()));
@@ -284,10 +283,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setCreateTime(System.currentTimeMillis());
         user.setStatus(Constant.ENABLE);
         this.insert(user);
-        infoToUserService.insert(InfoToUser.builder().userNo(userNo)
+        userInfoService.insert(UserInfo.builder().userNo(userNo)
                 .identityInfo(user.getUsername()).identityType(Constant.LOGIN_USERNAME).build());
-        UserToRole userToRole  = UserToRole.builder().userNo(user.getUserNo()).roleCode(role.getRoleCode()).build();
-        userToRoleService.insert(userToRole);
+        UserRole userRole  = UserRole.builder().userNo(user.getUserNo()).roleCode(role.getRoleCode()).build();
+        userRoleService.insert(userRole);
         return user;
     }
 

@@ -5,16 +5,16 @@ import com.liugh.base.BusinessException;
 import com.liugh.base.Constant;
 import com.liugh.base.PublicResultConstant;
 import com.liugh.entity.Menu;
-import com.liugh.entity.RoleToMenu;
-import com.liugh.entity.UserToRole;
+import com.liugh.entity.RoleMenu;
+import com.liugh.entity.UserRole;
 import com.liugh.model.RoleModel;
 import com.liugh.service.IMenuService;
 import com.liugh.service.IRoleService;
 import com.liugh.entity.Role;
 import com.liugh.mapper.RoleMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.liugh.service.IRoleToMenuService;
-import com.liugh.service.IUserToRoleService;
+import com.liugh.service.IRoleMenuService;
+import com.liugh.service.IUserRoleService;
 import com.liugh.util.ComUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +38,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
 
     @Autowired
-    private IRoleToMenuService roleToMenuService;
+    private IRoleMenuService roleToMenuService;
 
     @Autowired
-    private IUserToRoleService userToRoleService;
+    private IUserRoleService userToRoleService;
 
     @Autowired
     private IMenuService menuService;
@@ -72,7 +72,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         if (! result) {
             throw  new BusinessException(PublicResultConstant.UPDATE_ROLEINFO_ERROR);
         }
-        result = roleToMenuService.delete(new EntityWrapper<RoleToMenu>().eq("role_code",roleModel.getRoleCode()));
+        result = roleToMenuService.delete(new EntityWrapper<RoleMenu>().eq("role_code",roleModel.getRoleCode()));
         if (! result) {
             throw  new BusinessException("删除权限信息失败");
         }
@@ -86,7 +86,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     public void getRoleIsAdminByUserNo(String userNo) throws Exception {
-        UserToRole userToRole = userToRoleService.selectByUserNo(userNo);
+        UserRole userToRole = userToRoleService.selectByUserNo(userNo);
         Role role = this.selectById(userToRole.getRoleCode());
         if(role.getRoleName().equals(Constant.RoleType.SYS_ASMIN_ROLE)){
             throw new BusinessException(PublicResultConstant.UPDATE_SYSADMIN_INFO_ERROR);
@@ -111,7 +111,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         if (ComUtil.isEmpty(this.selectById(roleCode))) {
             throw new BusinessException("角色不存在");
         }
-        if(!ComUtil.isEmpty(userToRoleService.selectList(new EntityWrapper<UserToRole>().eq("role_code",roleCode)))){
+        if(!ComUtil.isEmpty(userToRoleService.selectList(new EntityWrapper<UserRole>().eq("role_code",roleCode)))){
             throw new BusinessException("角色存在相关用户,请先删除相关角色的用户");
         }
         this.delete(new EntityWrapper<Role>().eq("role_code",roleCode));
